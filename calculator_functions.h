@@ -1,4 +1,9 @@
+#pragma once
+
 #include <math.h>
+
+typedef double(CalculatorCalculateFunctionOneInput)(double a);
+typedef double(CalculatorCalculateFunctionTwoInput)(double a, double b);
 
 typedef enum {
     CalculatorFunctionTypeOneInput, // Real functions like sqrt, sinx, squared, etc
@@ -6,57 +11,28 @@ typedef enum {
     CalculatorFunctionTypePassive, // Add and subtract
 } CalculatorFunctionType;
 
-typedef double(CalculatorCalculateFunctionOneInput)(double a);
-typedef double(CalculatorCalculateFunctionTwoInput)(double a, double b);
-// typedef double(CalculatorFunctionCalculate)
-
-// typedef union {
-// double one_param_func(double a);
-// double two_param_func(double a, double b);
-// } CalculatorFunctionUnion;
-
 typedef struct {
     CalculatorFunctionType type;
     CalculatorCalculateFunctionOneInput* one_param_func;
     CalculatorCalculateFunctionTwoInput* two_param_func;
 } CalculatorFunction;
 
-double add(double a) {
-    return a;
-}
+double add(double a);
 
-double subtract(double a) {
-    return -a;
-}
+double subtract(double a);
 
-double multiply(double a, double b) {
-    return a * b;
-}
+double multiply(double a, double b);
 
-double divide(double a, double b) {
-    return a / b;
-}
+double divide(double a, double b);
 
-double square(double a) {
-    return pow(a, 2);
-}
+double square(double a);
 
-const CalculatorFunction CalculatorFunctionAdd = {
-    .type = CalculatorFunctionTypeOneInput,
-    .one_param_func = add};
+extern const CalculatorFunction CalculatorFunctionAdd;
 
-const CalculatorFunction CalculatorFunctionSubtract = {
-    .type = CalculatorFunctionTypeOneInput,
-    .one_param_func = subtract};
+extern const CalculatorFunction CalculatorFunctionSubtract;
 
-const CalculatorFunction CalculatorFunctionMultiply = {
-    .type = CalculatorFunctionTypeTwoInput,
-    .two_param_func = multiply};
+extern const CalculatorFunction CalculatorFunctionMultiply;
 
-const CalculatorFunction CalculatorFunctionDivide = {
-    .type = CalculatorFunctionTypeTwoInput,
-    .two_param_func = divide};
+extern const CalculatorFunction CalculatorFunctionDivide;
 
-const CalculatorFunction CalculatorFunctionSquare = {
-    .type = CalculatorFunctionTypeOneInput,
-    .one_param_func = square};
+extern const CalculatorFunction CalculatorFunctionSquare;

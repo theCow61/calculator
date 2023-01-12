@@ -1,20 +1,23 @@
+#include "calculator_display.h"
+// #include "calculator.h"
 
-typedef struct {
-    uint8_t frame_x;
-    uint8_t frame_y;
-    uint8_t frame_w;
-    uint8_t frame_h;
+/*void default_number_click_callback(void* context) {
+    CalculatorApp* clc_app = context;
+    UNUSED(clc_app);
+}
 
-    uint8_t text_x;
-    uint8_t text_y;
-    Font text_font;
-    const char* text_text;
+void empty_callback(void* context) {
+    CalculatorApp* clc_app = context;
+    UNUSED(clc_app);
+}*/
 
-    int8_t row;
-    int8_t column;
+void default_number_click_callback(Calculator* clc) {
+    UNUSED(clc);
+}
 
-    // CalculatorFunction* function;
-} CalculatorDisplayButton;
+void empty_callback(Calculator* clc) {
+    UNUSED(clc);
+}
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberZero =
     &(CalculatorDisplayButton){
@@ -28,6 +31,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberZero =
         "0",
         4,
         0,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberOne = &(CalculatorDisplayButton){
@@ -41,6 +45,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberOne = &(Calcul
     "1",
     3,
     0,
+    default_number_click_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberTwo = &(CalculatorDisplayButton){
@@ -54,6 +59,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberTwo = &(Calcul
     "2",
     3,
     1,
+    default_number_click_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberThree =
@@ -68,6 +74,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberThree =
         "3",
         3,
         2,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberFour =
@@ -82,6 +89,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberFour =
         "4",
         2,
         0,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberFive =
@@ -96,6 +104,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberFive =
         "5",
         2,
         1,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberSix = &(CalculatorDisplayButton){
@@ -109,6 +118,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberSix = &(Calcul
     "6",
     2,
     2,
+    default_number_click_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberSeven =
@@ -123,6 +133,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberSeven =
         "7",
         1,
         0,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberEight =
@@ -137,6 +148,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberEight =
         "8",
         1,
         1,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberNine =
@@ -151,6 +163,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNumberNine =
         "9",
         1,
         2,
+        default_number_click_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonClear = &(CalculatorDisplayButton){
@@ -164,6 +177,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonClear = &(Calculator
     "C",
     0,
     0,
+    empty_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNegative = &(CalculatorDisplayButton){
@@ -177,6 +191,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonNegative = &(Calcula
     "-",
     0,
     1,
+    empty_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionRemainder =
@@ -191,6 +206,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionRemainder =
         "%",
         0,
         2,
+        empty_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionDivide =
@@ -205,6 +221,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionDivide =
         "/", // change to asset
         0,
         3,
+        empty_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionMultiply =
@@ -219,6 +236,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionMultiply =
         "*",
         1,
         3,
+        empty_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionMinus =
@@ -233,20 +251,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionMinus =
         "-",
         2,
         3,
-    };
-
-CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionAdd =
-    &(CalculatorDisplayButton){
-        31,
-        37,
-        8,
-        10,
-        33,
-        46,
-        FontSecondary,
-        "+",
-        3,
-        3,
+        empty_callback,
     };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonCalculate = &(CalculatorDisplayButton){
@@ -260,6 +265,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonCalculate = &(Calcul
     "=",
     4,
     3,
+    empty_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonDecimal = &(CalculatorDisplayButton){
@@ -273,7 +279,23 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonDecimal = &(Calculat
     ".",
     4,
     2,
+    empty_callback,
 };
+
+CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionAdd =
+    &(CalculatorDisplayButton){
+        31,
+        37,
+        8,
+        10,
+        33,
+        46,
+        FontSecondary,
+        "+",
+        3,
+        3,
+        empty_callback,
+    };
 
 CalculatorDisplayButton const* calculator_display_button_grid[][4] = {
     {
