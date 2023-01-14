@@ -4,13 +4,19 @@
 #include <furi.h>
 #include <gui/gui.h>
 #include "calculator.h"
+#include "calculator_app.h"
 
-// struct CalculatorApp;
+struct CalculatorDisplayButton;
+struct CalculatorApp;
+// typedef void(CalculatorDisplayButtonOnClickCallback)(CalculatorApp* clc);
+/*typedef void(CalculatorDisplayButtonOnClickCallback)(
+    struct CalculatorApp* clc,
+    const struct CalculatorDisplayButton* b);*/
 
-typedef void(CalculatorDisplayButtonOnClickCallback)(Calculator* context);
-// typedef void(CalculatorDisplayButtonOnClickCallback)(void* context);
+// Maybe the definition of this function at the top should all take void* p cuz they dont all need clc_app
+typedef void(CalculatorDisplayButtonOnClickCallback)(struct CalculatorApp* clc_app);
 
-typedef struct {
+typedef struct CalculatorDisplayButton {
     uint8_t frame_x;
     uint8_t frame_y;
     uint8_t frame_w;
@@ -28,11 +34,23 @@ typedef struct {
     // CalculatorFunction* function;
 } CalculatorDisplayButton;
 
-void default_number_click_callback(Calculator* context);
-// void default_number_click_callback(void* context);
+/*void default_number_click_callback(Calculator* clc, const void* context);
 
-void empty_callback(Calculator* context);
-// void empty_callback(void* context);
+void empty_callback(Calculator* clc, const void* context);*/
+// change back to calculator
+/*void default_number_click_callback(Calculator* clc, const CalculatorDisplayButton* b);
+
+void empty_callback(Calculator* clc, const CalculatorDisplayButton* b);*/
+
+void default_number_click_callback(struct CalculatorApp* clc_app);
+
+void button_clear_click_callback(struct CalculatorApp* clc_app);
+
+void button_add_function_click_callback(struct CalculatorApp* clc_app);
+
+void button_calculate_click_callback(struct CalculatorApp* clc_app);
+
+void empty_callback(struct CalculatorApp* clc_app);
 
 extern CalculatorDisplayButton const* const CalculatorDisplayButtonNumberZero;
 

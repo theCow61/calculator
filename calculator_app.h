@@ -22,6 +22,7 @@ typedef struct {
 // struct CalculatorDisplayButton;
 // typedef struct CalculatorApp CalculatorApp;
 
+// struct CalculatorDisplayButton;
 typedef struct CalculatorApp {
     ViewPort* vp;
     Gui* gui;
@@ -32,5 +33,5 @@ typedef struct CalculatorApp {
     FuriMutex* mutex;
 
     // CalculatorDisplayElementGridLocation selected_grid_element;
-    CalculatorDisplayButton const* selected_button;
+    struct CalculatorDisplayButton const* selected_button;
 } CalculatorApp;

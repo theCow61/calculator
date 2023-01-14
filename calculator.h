@@ -14,7 +14,8 @@ typedef struct {
 } CalculatorCalculation;
 
 typedef struct {
-    char* framed_number;
+    // char framed_number[];
+    FuriString* framed_number;
     FuriMessageQueue* operation_queue; // To be added all together Type CalculatorCalculation
 } Calculator;
 
@@ -27,3 +28,5 @@ void calculator_free(Calculator* clc);
 void calculator_reset(Calculator* clc);
 
 void calculator_add_calculator_calculation(Calculator* clc, CalculatorCalculation* calculation);
+
+double calculator_full_solve(Calculator* clc);

@@ -1,7 +1,8 @@
+#include <string.h>
 #include "calculator.h"
 
 void calculator_reset(Calculator* clc) {
-    clc->framed_number = "";
+    furi_string_reset(clc->framed_number);
     furi_message_queue_reset(clc->operation_queue);
 }
 
@@ -39,11 +40,47 @@ CalculatorCalculation* calculator_calculation_alloc(const CalculatorFunction* fu
 Calculator* calculator_alloc() {
     Calculator* clc = malloc(sizeof(Calculator));
     clc->operation_queue = furi_message_queue_alloc(LIMIT_OF_CHAIN, sizeof(CalculatorCalculation));
-    clc->framed_number = "";
+    // clc->framed_number = "";
+    clc->framed_number = furi_string_alloc();
     return clc;
 }
 
 void calculator_free(Calculator* clc) {
     furi_message_queue_free(clc->operation_queue);
+    furi_string_free(clc->framed_number);
     free(clc);
+}
+
+double calculator_full_solve(Calculator* clc) {
+    double left_over;
+    furi_string_trim(clc->framed_number);
+    sscanf(furi_string_get_cstr(clc->framed_number), "%lf", &left_over);
+
+    CalculatorCalculation* typed_left_calculation =
+        calculator_calculation_alloc(&CalculatorFunctionAdd, left_over);
+
+    calculator_add_calculator_calculation(clc, typed_left_calculation);
+
+    double sum = 0;
+    CalculatorCalculation calculation;
+
+    /*while(furi_message_queue_get(clc->operation_queue, &calculation, FuriWaitForever) ==
+          FuriStatusOk) {
+        sum += calculation.value;
+    }*/
+
+    for(size_t i = 0; i < furi_message_queue_get_count(clc->operation_queue); i++) {
+        furi_message_queue_get(clc->operation_queue, &calculation, FuriWaitForever);
+        sum += calculation.value;
+    }
+
+    // So that u can use the result in later calcs
+    // This should be the only thing in the queue
+
+    calculator_reset(clc);
+
+    calculator_add_calculator_calculation(
+        clc, calculator_calculation_alloc(&CalculatorFunctionAdd, sum));
+
+    return sum;
 }

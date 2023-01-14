@@ -48,6 +48,18 @@ void draw_callback(Canvas* canvas, void* ctx) {
 
     draw_buttons(canvas, clc_app);
 
+    elements_frame(canvas, 43, 1, 83, 10);
+    elements_text_box(
+        canvas,
+        43,
+        1,
+        83,
+        10,
+        AlignRight,
+        AlignCenter,
+        furi_string_get_cstr(clc_app->calculator->framed_number),
+        false);
+
     furi_mutex_release(clc_app->mutex);
 }
 
@@ -58,7 +70,6 @@ void input_callback(InputEvent* evt, void* ctx) {
 
 CalculatorApp* calculator_app_alloc() {
     CalculatorApp* clc_app = malloc(sizeof(CalculatorApp));
-
     clc_app->mutex = furi_mutex_alloc(FuriMutexTypeNormal);
 
     clc_app->selected_button = calculator_display_button_grid[0][0];
@@ -230,7 +241,7 @@ int32_t calculator_main(void* p) {
                                                   [clc_app->selected_button->column + 1];
                 break;
             case InputKeyOk:
-                clc_app->selected_button->onclick_callback(clc_app->calculator);
+                clc_app->selected_button->onclick_callback(clc_app);
 
                 break;
             case InputKeyBack:

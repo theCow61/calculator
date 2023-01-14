@@ -1,22 +1,53 @@
+#include <string.h>
+#include <strings.h>
 #include "calculator_display.h"
-// #include "calculator.h"
+#include "calculator_app.h"
 
-/*void default_number_click_callback(void* context) {
-    CalculatorApp* clc_app = context;
-    UNUSED(clc_app);
+/*void default_number_click_callback(Calculator* clc, const void* context) {
+    CalculatorDisplayButton const* button = context;
+
+    strncat(clc->framed_number, button->text_text, strlen(button->text_text));
 }
 
-void empty_callback(void* context) {
-    CalculatorApp* clc_app = context;
-    UNUSED(clc_app);
+void empty_callback(Calculator* clc, const void* context) {
+    UNUSED(context);
+    UNUSED(clc);
 }*/
 
-void default_number_click_callback(Calculator* clc) {
-    UNUSED(clc);
+void default_number_click_callback(CalculatorApp* clc_app) {
+    furi_string_cat_str(clc_app->calculator->framed_number, clc_app->selected_button->text_text);
 }
 
-void empty_callback(Calculator* clc) {
-    UNUSED(clc);
+void button_clear_click_callback(CalculatorApp* clc_app) {
+    calculator_reset(clc_app->calculator);
+}
+
+void button_add_function_click_callback(CalculatorApp* clc_app) {
+    // furi_mutex_acquire(clc_app->mutex, FuriWaitForever);
+
+    double typed_value;
+    const char* c_str = furi_string_get_cstr(clc_app->calculator->framed_number);
+    sscanf(c_str, "%lf", &typed_value);
+
+    CalculatorCalculation* calculation =
+        calculator_calculation_alloc(&CalculatorFunctionAdd, typed_value);
+    calculator_add_calculator_calculation(clc_app->calculator, calculation);
+
+    furi_string_reset(
+        clc_app->calculator
+            ->framed_number); // Maybe make a framed_number_reset funciton in calculator.c
+
+    // furi_mutex_release(clc_app->mutex);
+}
+
+void button_calculate_click_callback(CalculatorApp* clc_app) {
+    double full_calculate = calculator_full_solve(clc_app->calculator);
+    // furi_string_reset(clc_app->calculator->framed_number); // Redundent; calculator_full_solve resets the Calculator struct
+    furi_string_printf(clc_app->calculator->framed_number, "%lf", full_calculate);
+}
+
+void empty_callback(CalculatorApp* clc_app) {
+    UNUSED(clc_app);
 }
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNumberZero =
@@ -177,7 +208,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonClear = &(Calculator
     "C",
     0,
     0,
-    empty_callback,
+    button_clear_click_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonNegative = &(CalculatorDisplayButton){
@@ -265,7 +296,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonCalculate = &(Calcul
     "=",
     4,
     3,
-    empty_callback,
+    button_calculate_click_callback,
 };
 
 CalculatorDisplayButton const* const CalculatorDisplayButtonDecimal = &(CalculatorDisplayButton){
@@ -294,7 +325,7 @@ CalculatorDisplayButton const* const CalculatorDisplayButtonFunctionAdd =
         "+",
         3,
         3,
-        empty_callback,
+        button_add_function_click_callback,
     };
 
 CalculatorDisplayButton const* calculator_display_button_grid[][4] = {
