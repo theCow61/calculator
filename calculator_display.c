@@ -25,9 +25,20 @@ void button_clear_click_callback(CalculatorApp* clc_app) {
 void button_add_function_click_callback(CalculatorApp* clc_app) {
     // furi_mutex_acquire(clc_app->mutex, FuriWaitForever);
 
+    /*double typed_value;
+    sscanf(furi_string_get_cstr(clc_app->calculator->framed_number), "%f", &typed_value);*/
+
+    // Theres got to be a better way to do this
     double typed_value;
+
     const char* c_str = furi_string_get_cstr(clc_app->calculator->framed_number);
-    sscanf(c_str, "%lf", &typed_value);
+    if(furi_string_search_char(clc_app->calculator->framed_number, '.') == FURI_STRING_FAILURE) {
+        int bruh;
+        sscanf(c_str, "%d", &bruh);
+        typed_value = bruh;
+    } else {
+        sscanf(c_str, "%lf", &typed_value);
+    }
 
     CalculatorCalculation* calculation =
         calculator_calculation_alloc(&CalculatorFunctionAdd, typed_value);
